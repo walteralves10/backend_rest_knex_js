@@ -8,7 +8,7 @@ sudo apt-get install nodejs
 
 sudo apt-get install npm
 
-  ## Instalando servidor nodemon e biblioteca knex + mysql + restify na pasta de seu projeto
+  ## Instalando servidor nodemon e plugins knex + mysql + restify na pasta de seu projeto
   
 sudo npm i --save restify restify-errors knex mysql
 
