@@ -28,6 +28,12 @@ server.listen(8080, function(){
 
 //rotas rest
 
+server.get('/', (req, res, next) => {
+	knex('vagas').then((dados) =>{
+		res.send(dados)
+	},next)
+});
+
 server.get('/positions/:id', (req, res, next) =>{
 	const { id } = req.params;
 
@@ -40,15 +46,15 @@ server.get('/positions/:id', (req, res, next) =>{
 	},next)
 });
 
-server.get('/:description/:location/:type', (req, res, next) => {
+server.get('/:description/:location/:full_time', (req, res, next) => {
 	const { description } = req.params;
 	const { location } = req.params;
-	const { type } = req.params;
+	const { full_time } = req.params;
 
 	knex('vagas')
-	.where('description', 'like', '%description%')
-	.andWhere('location','like','%location%')
-	.andWhere('type','like','%type%')
+	.where('description', 'like', '%'+description+'%')
+	.andWhere('location','like','%'+location+'%')
+	.andWhere('full_time','like','%'+full_time+'%')
 	.first()
 	.then((dados) => {
 		if(!dados) return res.send(new errs.BadRequestError('nenhum registro encontrado'));
