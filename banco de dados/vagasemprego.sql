@@ -18,6 +18,8 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
+
+
 --
 -- Database: `vagasemprego`
 --
@@ -50,7 +52,7 @@ INSERT INTO `vagas` (`id`, `titulo`, `location`, `description`, `full_time`, `em
 
 --
 -- Indexes for dumped tables
---
+-- waltao meu meu 
 
 --
 -- Indexes for table `vagas`
