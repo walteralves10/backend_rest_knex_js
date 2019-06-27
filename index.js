@@ -2,7 +2,7 @@ const restify = require('restify');
 
 const server = restify.createServer({
 	name: 'sine',
-	version: '1.0.0'
+	version: '1.1.0'
 });
 
 var knex = require('knex')({
@@ -17,9 +17,13 @@ var knex = require('knex')({
 
 const errs = require('restify-errors')
 
+
+
 server.use(restify.plugins.acceptParser(server.acceptable));
 server.use(restify.plugins.queryParser());
 server.use(restify.plugins.bodyParser());
+
+
 
 const PORT = process.env.PORT || 8080;
 
@@ -29,6 +33,110 @@ server.listen(PORT, function(){
 
 //rotas rest
 
+server.get('/', (req, res, next) => {
+	//document.write("Hello World!");
+
+	knex('vagas').select('id','titulo', 'location', 'full_time')
+	//.from('vagas')
+	.then((dados) =>{
+		if(!dados) {
+			return res.send(new errs.BadRequestError('Tem algo de diferente, reveja por favor'));
+		}
+		res.send(dados);
+	},next)
+
+});
+
+//positions
+server.get('/positions/:id', (req, res, next) =>{
+	//document.write("Hello World!");
+	const { codigo } = req.params;
+
+	knex('vagas').where('id',codigo).first()
+	.then((dados) => {
+		if(!dados) {
+			return res.send(new errs.BadRequestError('Tem algo de diferente, reveja por favor'));
+		}
+		res.send(dados);
+	},next)
+});
+
+//descriptions
+server.get('/description/:descricao', (req, res, next) => {
+	//document.write("Hello World!");
+	const { descricao } = req.params;
+
+	knex('vagas').where('description', 'like', '%'+descricao+'%')
+	.then((dados) => {
+		if(!dados) {
+			return res.send(new errs.BadRequestError('Tem algo de diferente, reveja por favor'));
+		}
+		res.send(dados);
+	},next)
+});
+
+//location
+server.get('/location/:location', (req, res, next) => {
+	//document.write("Hello World!");
+	const { location } = req.params;
+
+	knex('vagas').where('location','like','%'+location+'%')
+	.then((dados) => {
+		if(!dados) {
+			return res.send(new errs.BadRequestError('Tem algo de diferente, reveja por favor'));
+		}
+		res.send(dados);
+	},next)
+});
+
+//full_time
+server.get('/full_time/:full_time', (req, res, next) => {
+	//document.write("Hello World!");
+	const { full_time } = req.params;
+
+	knex('vagas').where('full_time','like','%'+full_time+'%')
+	.then((dados) => {
+		if(!dados) {
+			return res.send(new errs.BadRequestError('Tem algo de diferente, reveja por favor'));
+		}
+		res.send(dados);
+	},next)
+});
+
+//geral params
+server.get('/:description/:location/:full_time', (req, res, next) => {
+	//document.write("Hello World!");
+	const { description } = req.params;
+	const { location } = req.params;
+	const { full_time } = req.params;
+
+	knex('vagas').where('description', 'like', '%'+description+'%').orWhere('location','like','%'+location+'%').orWhere('full_time','like','%'+full_time+'%')
+	.then((dados) => {
+		if(!dados) {
+			return res.send(new errs.BadRequestError('Tem algo de diferente, reveja por favor'));
+		}
+		res.send(dados);
+	},next)
+});
+
+server.get('/description/:description/location/:location/fulltime/:full_time', (req, res, next) => {
+	//document.write("Hello World!");
+	const { description } = req.params;
+	const { location } = req.params;
+	const { full_time } = req.params;
+
+	knex('vagas')
+	.where('description', 'like', '%'+description+'%').orWhere('location','like','%'+location+'%').orWhere('full_time','like','%'+full_time+'%')
+	.then((dados) => {
+		if(!dados) {
+			return res.send(new errs.BadRequestError('Tem algo de diferente, reveja por favor'));
+		}
+		res.send(dados);
+	},next)
+});
+
+
+/*
 server.get('/', (req, res, next) => {
 
 	res.send('Bem Vindo: utilize - /positions/:id ou ||'+ 
@@ -119,3 +227,6 @@ server.get('/description/:description/location/:location/fulltime/:full_time', (
 		res.send(dados);
 	},next)
 });
+
+
+*/
